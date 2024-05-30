@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <script src="https://kit.fontawesome.com/3f93afa3d3.js" crossorigin="anonymous"></script>
+    <title>Bem-vindo</title>
+</head>
+<body>
+    <section class="main">
+        <div class="content">
+            <div class="btn_sections">
+                <div id="btn_save"><i class="fa-solid fa-floppy-disk"></i></div><!-- Create/Update -->
+                <div id="btn_search"><i class="fa-solid fa-magnifying-glass"></i></div><!-- Read -->
+                <div id="btn_delete"><i class="fa-solid fa-trash"></i></div><!-- Delete -->
+            </div>
+            <div class="result_content">
+                <div class="fields">
+                    <div>
+                        <form action="" id="carForm">
+                            <input type="text" hidden id="id_car">
+                            <div class="field">
+                                <label for="automaker">Montadora</label>
+                                <input type="text" id="automaker">
+                            </div>
+                            <div class="field">
+                                <label for="model">Modelo</label>
+                                <input type="text" id="model">
+                            </div>
+                            <div class="field">
+                                <label for="year">Ano</label>
+                                <input type="number" id="year">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="result">
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="{% static 'js/script.js'%}"></script>
+</body>
+</html>
