@@ -10,18 +10,25 @@ def home_page(request):
 
 def add_car(request):
     if request.method == 'POST':
-        print(request.body)
         try:
             data = json.loads(request.body)
             automaker = data.get('automaker')
             model = data.get('model')
             year = data.get('year')
+            car_id = data.get('id_car')
+
             if automaker == "" or model == "" or year == "":
-                print("chegou no if")
                 return JsonResponse({'status': 'error', 'message': 'Todos os campos são obrigatórios'}, status=400)
 
-            car = Car(automakers=automaker, model=model, year=year)
-            car.save()
+            if car_id: # Se houver um ID, trata-se de uma atualização
+                car = Car.objects.get(pk=car_id)
+                car.automakers = automaker
+                car.model = model
+                car.year = year
+                car.save()
+            else: # é uma criação
+                car = Car(automakers=automaker, model=model, year=year)
+                car.save()
 
             return JsonResponse({'status': 'success'})
         except Exception as e:

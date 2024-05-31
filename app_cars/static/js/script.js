@@ -1,4 +1,5 @@
 document.getElementById('btn_save').addEventListener('click', function() {
+    const id = document.getElementById('id_car').value;
     const automaker = document.getElementById('automaker').value;
     const model = document.getElementById('model').value;
     const year = document.getElementById('year').value;
@@ -10,6 +11,7 @@ document.getElementById('btn_save').addEventListener('click', function() {
             'X-CSRFToken': getCookie('csrftoken')
         },
         body: JSON.stringify({
+            id_car: id,
             automaker: automaker,
             model: model,
             year: year
@@ -95,6 +97,20 @@ function displayResults(cars) {
         row.insertCell(2).innerText = car.automakers;
         row.insertCell(3).innerText = car.model;
         row.insertCell(4).innerText = car.year;
+
+        // Adicionar evento de clique ao ícone de lápis
+        icon.addEventListener('click', function() {
+            const carId = this.getAttribute('data-id');
+            const car = cars.find(car => car.id === parseInt(carId));
+
+            if (car) {
+                console.log(car.id)
+                document.getElementById('id_car').value = car.id;
+                document.getElementById('automaker').value = car.automakers;
+                document.getElementById('model').value = car.model;
+                document.getElementById('year').value = car.year;
+            }
+        });
     });
 
     resultDiv.appendChild(table);
@@ -150,6 +166,7 @@ function getCookie(name) {
 }
 
 function clearFormFields() {
+    document.getElementById('id_car').value = ''
     document.getElementById('automaker').value = '';
     document.getElementById('model').value = '';
     document.getElementById('year').value = '';
