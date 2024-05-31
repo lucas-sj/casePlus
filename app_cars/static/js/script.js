@@ -20,6 +20,7 @@ document.getElementById('btn_save').addEventListener('click', function() {
         if (data.status === 'success') {
             alert('Carro salvo com sucesso!');
             clearFormFields()
+            search_car()
         } else {
             alert(data.message);
         }
@@ -28,6 +29,76 @@ document.getElementById('btn_save').addEventListener('click', function() {
         console.error('Error:', error);
     });
 });
+
+document.getElementById('btn_search').addEventListener('click', function() {
+    search_car()
+});
+function search_car(){
+    const automaker = document.getElementById('automaker').value;
+    const model = document.getElementById('model').value;
+    const year = document.getElementById('year').value;
+
+    const queryParams = new URLSearchParams({
+        automaker: automaker,
+        model: model,
+        year: year
+    });
+
+    fetch('search_car?' + queryParams.toString(), {
+        method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            displayResults(data.cars);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function displayResults(cars) {
+    const resultDiv = document.querySelector('.result');
+    resultDiv.innerHTML = '';
+
+    if (cars.length === 0) {
+        resultDiv.innerHTML = '<p>Nenhum carro encontrado.</p>';
+        return;
+    }
+
+    const table = document.createElement('table');
+    const header = table.createTHead();
+    const headerRow = header.insertRow(0);
+    headerRow.insertCell(0).innerText = '';
+    headerRow.insertCell(1).innerText = 'ID';
+    headerRow.insertCell(2).innerText = 'Montadora';
+    headerRow.insertCell(3).innerText = 'Modelo';
+    headerRow.insertCell(4).innerText = 'Ano';
+
+    const tbody = table.createTBody();
+    cars.forEach(car => {
+        const row = tbody.insertRow();
+        const cell = row.insertCell(0);
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.setAttribute('data-id', car.id);
+        const icon = document.createElement('i');
+        icon.className = 'fa-solid fa-pencil';
+        icon.setAttribute('data-id', car.id);
+        cell.appendChild(checkbox);
+        cell.appendChild(icon);
+
+        row.insertCell(1).innerText = car.id;
+        row.insertCell(2).innerText = car.automakers;
+        row.insertCell(3).innerText = car.model;
+        row.insertCell(4).innerText = car.year;
+    });
+
+    resultDiv.appendChild(table);
+}
 
 // Função para obter o CSRF token dos cookies
 function getCookie(name) {
