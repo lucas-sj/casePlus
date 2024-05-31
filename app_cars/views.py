@@ -49,3 +49,17 @@ def search_car(request):
         return JsonResponse({'status': 'success', 'cars': car_list})
     else:
         return JsonResponse({'status': 'error', 'message': 'Método não permitido'}, status=405)
+
+
+def delete_car(request):
+    if request.method == 'DELETE':
+        try:
+            ids = request.GET.getlist('ids')
+            if not ids:
+                return JsonResponse({'status': 'error', 'message': 'Nenhum ID fornecido'}, status=400)
+            Car.objects.filter(id__in=ids).delete()
+            return JsonResponse({'status': 'success', 'message': 'Carros deletados com sucesso'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Método não permitido'}, status=405)

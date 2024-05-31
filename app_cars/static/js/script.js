@@ -100,6 +100,39 @@ function displayResults(cars) {
     resultDiv.appendChild(table);
 }
 
+document.getElementById('btn_delete').addEventListener('click', function() {
+    const checkboxes = document.querySelectorAll('.result input[type="checkbox"]:checked');
+    const ids = Array.from(checkboxes).map(checkbox => checkbox.getAttribute('data-id'));
+
+    if (ids.length === 0) {
+        alert('Por favor, selecione pelo menos um carro para deletar.');
+        return;
+    }
+
+    const queryParams = new URLSearchParams();
+    ids.forEach(id => queryParams.append('ids', id));
+
+    fetch('delete_car?' + queryParams.toString(), {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Carros deletados com sucesso!');
+            search_car()
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
 // Função para obter o CSRF token dos cookies
 function getCookie(name) {
     let cookieValue = null;
