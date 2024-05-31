@@ -5,6 +5,7 @@ Segundo acessar o projeto
 # cd casePlus;
 
 Terceiro instalar e ativar o ambiente virtual python com nome de virtual
+
 Criar
 # python -m venv virtual
 Ativar
